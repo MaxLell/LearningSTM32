@@ -1,11 +1,11 @@
 # STM32CubeIDE: Build- und IDE-Dateien ignorieren
 
-# Build-Ordner
+# Build-Ordner (ignore build outputs but keep project config)
 **/Debug/
 **/Release/
 **/build/
 
-# IDE-Metadaten
+# IDE-Metadaten (keep project files, ignore user-specific settings)
 **/.settings/
 **/.metadata/
 **/*.launch
@@ -15,8 +15,10 @@
 **/*.swp
 **/*.swo
 **/*.svd
-**/*.project
-**/*.cproject
+**/*.mxproject
+
+# Eclipse/STM32CubeIDE user-specific files
+**/language.settings.xml
 
 # OS-spezifisch
 **/.DS_Store
