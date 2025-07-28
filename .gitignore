@@ -1,0 +1,23 @@
+# STM32CubeIDE: Build- und IDE-Dateien ignorieren
+
+# Build-Ordner
+**/Debug/
+**/Release/
+**/build/
+
+# IDE-Metadaten
+**/.settings/
+**/.metadata/
+**/*.launch
+**/*.log
+**/*.tmp
+**/*.bak
+**/*.swp
+**/*.swo
+**/*.svd
+**/*.project
+**/*.cproject
+
+# OS-spezifisch
+**/.DS_Store
+**/Thumbs.db
