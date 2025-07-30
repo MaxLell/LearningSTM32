@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "user_app.h"
+#include "../../User_App/UserMain/UserMain.h"
 
 /* USER CODE END Includes */
 
@@ -95,7 +95,7 @@ int main(void) {
   MX_ICACHE_Init();
   /* USER CODE BEGIN 2 */
 
-  user_main();
+  UserMain();
 
   // From here the execution is in the user application
   // The user application should not return to this point
