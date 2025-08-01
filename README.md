@@ -7,13 +7,13 @@ This series attempts to replicate the Blog Article: How to learn a new Microcont
 As the name implies this is the classic busy wait blinky LED with a busy wait. So this is about putting a value on the digital output of the LED pin.
 
 ### 02_ButtonPolled
-This is about polling the GPIO Button. So this is about capturing the digital in value on the button pin.
+This is about polling the GPIO Button. So this is about capturing the digital in value on the button pin. If the button was pulled, enable the LED for a short period of time to then disable it again.
 
 ### 03_ButtonInterrupt
 Blink the led in response to an external interrupt, which originates from the button.
 
 ### 04_BlinkyLedTimerInterrupt
-Here the Led is toggled by a timer interrup
+Here the Led is toggled by a timer interrupt after a long button press. Also make sure to debounce the Button.
 
 ### 05_ButtonToBlinkyWithTimerInterrupt
 Blink an LED with a fixed rate (triggered by a timer interrupt). A button interrupt changes the rate by which the LED is triggered
