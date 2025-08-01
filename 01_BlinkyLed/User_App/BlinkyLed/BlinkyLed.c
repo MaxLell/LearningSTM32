@@ -10,12 +10,10 @@
 #include "custom_assert.h"
 #include "main.h"
 
-#define MAX_PIN_COUNT_PER_PORT 20
 
 void BlinkyLed_VerifyArguments(BlinkyLed_Config_t *inout_pSelf) {
   ASSERT(inout_pSelf);
   ASSERT(inout_pSelf->pGpioPort);
-  ASSERT(inout_pSelf->u16GpioPin < MAX_PIN_COUNT_PER_PORT);
   ASSERT(inout_pSelf->eLedState <= E_BLINKY_LED_ON);
 }
 

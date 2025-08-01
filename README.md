@@ -3,22 +3,22 @@ This series attempts to replicate the Blog Article: How to learn a new Microcont
 
 
 ## 1. GPIOs (Digital Input and Output) and Timers
-### 11_LED_busy_wait 
+### 01_BlinkyLed
 As the name implies this is the classic busy wait blinky LED with a busy wait. So this is about putting a value on the digital output of the LED pin.
 
-### 12_LED_ButtonPolled
+### 02_ButtonPolled
 This is about polling the GPIO Button. So this is about capturing the digital in value on the button pin.
 
-### 13_LED_ButtonInterrupt
+### 03_ButtonInterrupt
 Blink the led in response to an external interrupt, which originates from the button.
 
-### 14_LED_TimerInterupt
+### 04_BlinkyLedTimerInterrupt
 Here the Led is toggled by a timer interrup
 
-### 15_LED_TimerInterrupt_ButtonChange
+### 05_ButtonToBlinkyWithTimerInterrupt
 Blink an LED with a fixed rate (triggered by a timer interrupt). A button interrupt changes the rate by which the LED is triggered
 
-### 16_LED_RTOS_ButtonToBlinky
+### 06_RtosButtonToBlinky
 - The Button is sampled by the input handler task
 - The Output Handler task configures the timer (blink rate) and the blink counter
 - The LED is toggled 10 times when a long press occured on the button. (To be done by the timer ist)
