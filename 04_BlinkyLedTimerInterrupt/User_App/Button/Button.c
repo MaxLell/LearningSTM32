@@ -1,0 +1,51 @@
+/*
+ * Button.c
+ *
+ *  Created on: Aug 1, 2025
+ *      Author: MaximilianLell
+ */
+#include "Button.h"
+#include "../../Core/Inc/main.h"
+#include "../../Utils/CommonTypes.h"
+#include "../../Utils/CustomAssert.h"
+
+void Button_VerifyArguments(Button_Config_t *inout_pButton) {
+  // Verify that the Button configuration is valid
+  ASSERT(NULL != inout_pButton);
+  ASSERT(NULL != inout_pButton->pGpioPort);
+  ASSERT(0 != inout_pButton->u16GpioPin);
+  ASSERT(E_BUTTON_POLARITY_INVALID != inout_pButton->ePolarity);
+}
+
+Button_State_e Button_GetState(Button_Config_t *inout_pButton) {
+  Button_VerifyArguments(inout_pButton);
+
+  // Get the current Button State
+  GPIO_PinState ePinState =
+      HAL_GPIO_ReadPin(inout_pButton->pGpioPort, inout_pButton->u16GpioPin);
+
+  // Determine the Button State based on the configured polarity
+  if (E_BUTTON_POLARITY_ACTIVE_LOW == inout_pButton->ePolarity) {
+    inout_pButton->eButtonState = (GPIO_PIN_RESET == ePinState)
+                                      ? E_BUTTON_STATE_PRESSED
+                                      : E_BUTTON_STATE_RELEASED;
+  } else {
+    inout_pButton->eButtonState = (GPIO_PIN_SET == ePinState)
+                                      ? E_BUTTON_STATE_PRESSED
+                                      : E_BUTTON_STATE_RELEASED;
+  }
+  return inout_pButton->eButtonState;
+}
+
+bool Button_WasPressed(Button_Config_t *inout_pButton) {
+  Button_VerifyArguments(inout_pButton);
+
+  bool bWasPressed = inout_pButton->bExtiIsrWasTriggered;
+  inout_pButton->bExtiIsrWasTriggered = false;
+  return bWasPressed;
+}
+
+void Button_ExtiIsr(Button_Config_t *inout_pButton) {
+  ASSERT(inout_pButton);
+  inout_pButton->bExtiIsrWasTriggered = true;
+}
