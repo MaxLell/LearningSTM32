@@ -6,8 +6,8 @@
  */
 
 #include "IsrHandler.h"
-#include "../../Utils/custom_assert.h"
-#include "../../Utils/common_types.h"
+#include "../../Utils/CommonTypes.h"
+#include "../../Utils/CustomAssert.h"
 
 static IsrHandler_Entry_t *g_atIsrTable;
 static bool g_bWasInitialized;
@@ -40,9 +40,9 @@ void IsrHandler_RegisterIsr(const Isr_Id_e in_eId,
   ASSERT(E_ISR_ID_LAST > in_eId);
   ASSERT(E_ISR_ID_INVALID != in_eId);
 
-  // Check if the ISR ID is already registered
-  bool bIsrWasRegistered = ((g_atIsrTable[in_eId].pfCallback != NULL) &&
-                            (g_atIsrTable[in_eId].ptContext != NULL));
+  // Check if the ISR ID is registered
+  bool bIsrWasRegistered = ((NULL != g_atIsrTable[in_eId].pfCallback) &&
+                            (NULL != g_atIsrTable[in_eId].ptContext));
   ASSERT(false == bIsrWasRegistered);
 
   // Place the ISR entry in the table
@@ -58,8 +58,8 @@ void IsrHandler_UnregisterIsr(const Isr_Id_e in_eId) {
   ASSERT(E_ISR_ID_INVALID != in_eId);
 
   // Check if the ISR ID is registered
-  bool bIsrWasRegistered = ((g_atIsrTable[in_eId].pfCallback != NULL) &&
-                            (g_atIsrTable[in_eId].ptContext != NULL));
+  bool bIsrWasRegistered = ((NULL != g_atIsrTable[in_eId].pfCallback) &&
+                            (NULL != g_atIsrTable[in_eId].ptContext));
   ASSERT(true == bIsrWasRegistered);
 
   // Clear the ISR entry
@@ -74,8 +74,8 @@ void IsrHandler_DispatchIsr(const Isr_Id_e in_eId) {
   ASSERT(E_ISR_ID_LAST > in_eId);
   ASSERT(E_ISR_ID_INVALID != in_eId);
 
-  bool bIsrIsRegistered = ((g_atIsrTable[in_eId].pfCallback) &&
-                           (g_atIsrTable[in_eId].ptContext));
+  bool bIsrIsRegistered = ((NULL != g_atIsrTable[in_eId].pfCallback) &&
+                           (NULL != g_atIsrTable[in_eId].ptContext));
   if (true == bIsrIsRegistered) {
     // Call the registered ISR callback with its context
     g_atIsrTable[in_eId].pfCallback(g_atIsrTable[in_eId].ptContext);

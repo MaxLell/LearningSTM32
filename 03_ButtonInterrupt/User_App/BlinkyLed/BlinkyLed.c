@@ -7,7 +7,9 @@
 
 #include "BlinkyLed.h"
 #include "../../Core/Inc/main.h"
-#include "../../Utils/custom_assert.h"
+#include "../../Utils/CommonTypes.h"
+#include "../../Utils/CustomAssert.h"
+
 
 void BlinkyLed_VerifyArguments(BlinkyLed_Config_t *inout_pLed) {
   ASSERT(inout_pLed);

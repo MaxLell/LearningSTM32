@@ -9,12 +9,11 @@
 #define USER_MAIN_C_
 
 #include "../../Core/Inc/main.h"
-#include "../../Utils/common_types.h"
+#include "../../Utils/CommonTypes.h"
 #include "../BlinkyLed/BlinkyLed.h"
 #include "../Button/Button.h"
 #include "../IsrHandler/IsrHandler.h"
 #include "../Profiler/Profiler.h"
-
 
 #define MAX_NOF_BUTTON_PRESSES (3U)
 

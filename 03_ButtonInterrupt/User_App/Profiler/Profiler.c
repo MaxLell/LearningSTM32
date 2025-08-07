@@ -5,15 +5,16 @@
  *      Author: MaximilianLell
  */
 
+#include "../../Utils/CustomAssert.h"
+#include "../../Utils/CommonTypes.h"
 #include "Profiler.h"
 #include "../../Core/Inc/main.h"
-#include "../../Utils/custom_assert.h"
-
 
 extern u32 SystemCoreClock;
 static bool bProfilerWasInitialized = false;
 
 void Profiler_Init(void) {
+  ASSERT(false == bProfilerWasInitialized);
   // Enable DWT and cycle counter
   CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
   DWT->CYCCNT = 0;
@@ -23,15 +24,15 @@ void Profiler_Init(void) {
 }
 
 void Profiler_Start(Profiler_Config_t *const inout_ptProfiler) {
-  inout_ptProfiler->u32StartCycles = DWT->CYCCNT;
   ASSERT(NULL != inout_ptProfiler);
   ASSERT(bProfilerWasInitialized);
+  inout_ptProfiler->u32StartCycles = DWT->CYCCNT;
 }
 
 void Profiler_Stop(Profiler_Config_t *const inout_ptProfiler) {
-  inout_ptProfiler->u32StopCycles = DWT->CYCCNT;
   ASSERT(NULL != inout_ptProfiler);
   ASSERT(bProfilerWasInitialized);
+  inout_ptProfiler->u32StopCycles = DWT->CYCCNT;
 }
 
 u32 Profiler_GetCycles(const Profiler_Config_t *const inout_ptProfiler) {

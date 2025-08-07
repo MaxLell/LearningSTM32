@@ -4,10 +4,10 @@
  *  Created on: Aug 1, 2025
  *      Author: MaximilianLell
  */
-
 #include "Button.h"
 #include "../../Core/Inc/main.h"
-#include "../../Utils/custom_assert.h"
+#include "../../Utils/CommonTypes.h"
+#include "../../Utils/CustomAssert.h"
 
 void Button_VerifyArguments(Button_Config_t *inout_pButton) {
   // Verify that the Button configuration is valid

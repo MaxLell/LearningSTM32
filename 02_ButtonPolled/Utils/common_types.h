@@ -4,7 +4,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-
 // Unsigned integer types
 typedef uint8_t u8;
 typedef uint16_t u16;
