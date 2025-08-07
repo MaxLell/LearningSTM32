@@ -8,7 +8,7 @@
 #ifndef BLINKYLED_BLINKYLED_H_
 #define BLINKYLED_BLINKYLED_H_
 
-#include "common_types.h"
+#include "../../Utils/common_types.h"
 
 typedef enum { E_BLINKY_LED_OFF = 0, E_BLINKY_LED_ON = 1 } BlinkyLed_State_e;
 

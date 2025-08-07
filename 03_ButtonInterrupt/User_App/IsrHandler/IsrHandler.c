@@ -6,15 +6,15 @@
  */
 
 #include "IsrHandler.h"
-#include "IsrIds.h"
-#include "custom_assert.h"
+#include "../../Utils/custom_assert.h"
+#include "../../Utils/common_types.h"
 
 static IsrHandler_Entry_t *g_atIsrTable;
 static bool g_bWasInitialized;
 
 void IsrHandler_Init(IsrHandler_Entry_t *const inout_atIsrTable,
                      const u8 in_u8TableSize) {
-  ASSERT(NULL != inout_atIsrTable);
+  ASSERT(inout_atIsrTable);
   ASSERT(E_ISR_ID_LAST == in_u8TableSize);
   ASSERT(false == g_bWasInitialized);
 
@@ -27,14 +27,16 @@ void IsrHandler_Init(IsrHandler_Entry_t *const inout_atIsrTable,
   // set the local static reference
   g_atIsrTable = inout_atIsrTable;
   g_bWasInitialized = true;
+
+  return;
 }
 
 void IsrHandler_RegisterIsr(const Isr_Id_e in_eId,
                             const IsrCallback_t in_pfIsrCallback,
                             const void *const in_pContext) {
-  ASSERT(NULL != g_atIsrTable);
-  ASSERT(NULL != in_pfIsrCallback);
-  ASSERT(NULL != in_pContext);
+  ASSERT(g_atIsrTable);
+  ASSERT(in_pfIsrCallback);
+  ASSERT(in_pContext);
   ASSERT(E_ISR_ID_LAST > in_eId);
   ASSERT(E_ISR_ID_INVALID != in_eId);
 
@@ -46,10 +48,12 @@ void IsrHandler_RegisterIsr(const Isr_Id_e in_eId,
   // Place the ISR entry in the table
   g_atIsrTable[in_eId].pfCallback = in_pfIsrCallback;
   g_atIsrTable[in_eId].ptContext = in_pContext;
+
+  return;
 }
 
 void IsrHandler_UnregisterIsr(const Isr_Id_e in_eId) {
-  ASSERT(NULL != g_atIsrTable);
+  ASSERT(g_atIsrTable);
   ASSERT(E_ISR_ID_LAST > in_eId);
   ASSERT(E_ISR_ID_INVALID != in_eId);
 
@@ -61,16 +65,20 @@ void IsrHandler_UnregisterIsr(const Isr_Id_e in_eId) {
   // Clear the ISR entry
   g_atIsrTable[in_eId].pfCallback = NULL;
   g_atIsrTable[in_eId].ptContext = NULL;
+
+  return;
 }
 
 void IsrHandler_DispatchIsr(const Isr_Id_e in_eId) {
-  ASSERT(NULL != g_atIsrTable);
+  ASSERT(g_atIsrTable);
   ASSERT(E_ISR_ID_LAST > in_eId);
   ASSERT(E_ISR_ID_INVALID != in_eId);
 
-  ASSERT(NULL != g_atIsrTable[in_eId].pfCallback);
-  ASSERT(NULL != g_atIsrTable[in_eId].ptContext);
-
-  // Call the registered ISR callback with its context
-  g_atIsrTable[in_eId].pfCallback(g_atIsrTable[in_eId].ptContext);
+  bool bIsrIsRegistered = ((g_atIsrTable[in_eId].pfCallback) &&
+                           (g_atIsrTable[in_eId].ptContext));
+  if (true == bIsrIsRegistered) {
+    // Call the registered ISR callback with its context
+    g_atIsrTable[in_eId].pfCallback(g_atIsrTable[in_eId].ptContext);
+  }
+  return;
 }

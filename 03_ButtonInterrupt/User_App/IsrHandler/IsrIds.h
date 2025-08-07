@@ -8,8 +8,6 @@
 #ifndef ISRHANDLER_ISRIDS_H_
 #define ISRHANDLER_ISRIDS_H_
 
-#include "main.h"
-
 typedef enum {
   E_ISR_ID_INVALID = -1,
 

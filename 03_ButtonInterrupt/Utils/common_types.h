@@ -2,8 +2,8 @@
 #define COMMON_TYPES_H
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
-
 
 // Unsigned integer types
 typedef uint8_t u8;

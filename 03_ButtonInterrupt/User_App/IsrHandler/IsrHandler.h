@@ -8,8 +8,9 @@
 #ifndef ISRHANDLER_ISRHANDLER_H_
 #define ISRHANDLER_ISRHANDLER_H_
 
+#include "../../Utils/common_types.h"
 #include "IsrIds.h"
-#include "common_types.h"
+
 
 typedef void (*IsrCallback_t)(const void *pContext);
 

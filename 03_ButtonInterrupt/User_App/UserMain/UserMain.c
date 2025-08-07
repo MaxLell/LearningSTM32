@@ -8,15 +8,20 @@
 #ifndef USER_MAIN_C_
 #define USER_MAIN_C_
 
-#include "BlinkyLed.h"
-#include "Button.h"
-#include "IsrHandler.h"
-#include "common_types.h"
-#include "main.h"
+#include "../../Core/Inc/main.h"
+#include "../../Utils/common_types.h"
+#include "../BlinkyLed/BlinkyLed.h"
+#include "../Button/Button.h"
+#include "../IsrHandler/IsrHandler.h"
+#include "../Profiler/Profiler.h"
+
+
+#define MAX_NOF_BUTTON_PRESSES (3U)
 
 static BlinkyLed_Config_t tBlinkyLed;
 static Button_Config_t tButton;
 static IsrHandler_Entry_t atIsrVectorTable[E_ISR_ID_LAST];
+static u8 u8ButtonPressedCounter = 0;
 
 void UserMain_Init() {
   // Configure the LED
@@ -34,15 +39,22 @@ void UserMain_Init() {
   IsrHandler_Init(atIsrVectorTable, E_ISR_ID_LAST);
   IsrHandler_RegisterIsr(E_ISR_ID_BUTTON_EXTI, (IsrCallback_t)Button_ExtiIsr,
                          (void *)&tButton);
+
+  // Start the Profiler
+  Profiler_Init();
 }
 
 void UserMain_Loop() {
-
   bool bButtonWasPressed = Button_WasPressed(&tButton);
   if (true == bButtonWasPressed) {
-    BlinkyLed_Enable(&tBlinkyLed);
-    HAL_Delay(200);
-    BlinkyLed_Disable(&tBlinkyLed);
+
+    u8ButtonPressedCounter++;
+    BlinkyLed_Toggle(&tBlinkyLed);
+    HAL_Delay(100);
+
+    if (MAX_NOF_BUTTON_PRESSES == u8ButtonPressedCounter) {
+      IsrHandler_UnregisterIsr(E_ISR_ID_BUTTON_EXTI);
+    }
   }
 }
 
