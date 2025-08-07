@@ -10,10 +10,13 @@
 
 #include "BlinkyLed.h"
 #include "Button.h"
+#include "IsrHandler.h"
+#include "common_types.h"
 #include "main.h"
 
 static BlinkyLed_Config_t tBlinkyLed;
 static Button_Config_t tButton;
+static IsrHandler_Entry_t atIsrVectorTable[E_ISR_ID_LAST];
 
 void UserMain_Init() {
   // Configure the LED
@@ -26,13 +29,19 @@ void UserMain_Init() {
   tButton.u16GpioPin = USER_BUTTON_Pin;
   tButton.ePolarity = E_BUTTON_POLARITY_ACTIVE_HIGH;
   tButton.eButtonState = E_BUTTON_STATE_RELEASED;
+
+  // Configure the IsrHandler to the EXTI Button Interrupt
+  IsrHandler_Init(atIsrVectorTable, E_ISR_ID_LAST);
+  IsrHandler_RegisterIsr(E_ISR_ID_BUTTON_EXTI, (IsrCallback_t)Button_ExtiIsr,
+                         (void *)&tButton);
 }
 
 void UserMain_Loop() {
-  Button_State_e eButtonState = Button_GetState(&tButton);
-  if (E_BUTTON_STATE_PRESSED == eButtonState) {
+
+  bool bButtonWasPressed = Button_WasPressed(&tButton);
+  if (true == bButtonWasPressed) {
     BlinkyLed_Enable(&tBlinkyLed);
-    HAL_Delay(100);
+    HAL_Delay(200);
     BlinkyLed_Disable(&tBlinkyLed);
   }
 }

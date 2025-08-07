@@ -8,8 +8,9 @@
 #include "common_types.h"
 
 #include "Button.h"
-#include "main.h"
 #include "custom_assert.h"
+#include "main.h"
+
 
 void Button_VerifyArguments(Button_Config_t *inout_pButton) {
   // Verify that the Button configuration is valid
