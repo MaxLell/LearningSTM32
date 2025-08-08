@@ -9,6 +9,8 @@
 #include "../../Utils/CommonTypes.h"
 #include "../../Utils/CustomAssert.h"
 
+#define LONG_PRESS_PERIOD_MS 500
+
 void Button_VerifyArguments(Button_Config_t *inout_pButton) {
   // Verify that the Button configuration is valid
   ASSERT(NULL != inout_pButton);
@@ -17,7 +19,7 @@ void Button_VerifyArguments(Button_Config_t *inout_pButton) {
   ASSERT(E_BUTTON_POLARITY_INVALID != inout_pButton->ePolarity);
 }
 
-Button_State_e Button_GetState(Button_Config_t *inout_pButton) {
+Button_PinState_e Button_GetPinState(Button_Config_t *inout_pButton) {
   Button_VerifyArguments(inout_pButton);
 
   // Get the current Button State
@@ -37,15 +39,85 @@ Button_State_e Button_GetState(Button_Config_t *inout_pButton) {
   return inout_pButton->eButtonState;
 }
 
-bool Button_WasPressed(Button_Config_t *inout_pButton) {
-  Button_VerifyArguments(inout_pButton);
-
-  bool bWasPressed = inout_pButton->bExtiIsrWasTriggered;
-  inout_pButton->bExtiIsrWasTriggered = false;
-  return bWasPressed;
+void Button_TimIsr(Button_Config_t *inout_pButton) {
+  ASSERT(inout_pButton);
+  // Update the Debounced State of the Button
+  Button_GetDebouncedState(inout_pButton);
+  return;
 }
 
-void Button_ExtiIsr(Button_Config_t *inout_pButton) {
-  ASSERT(inout_pButton);
-  inout_pButton->bExtiIsrWasTriggered = true;
+Button_Event_e Button_GetLastEvent(Button_Config_t *const inout_pButton) {
+  Button_VerifyArguments(inout_pButton);
+  Button_Event_e eLastEvent = inout_pButton->eLastButtonEvent;
+  return eLastEvent;
+}
+
+void Button_ClearLastEvent(Button_Config_t *const inout_pButton) {
+  Button_VerifyArguments(inout_pButton);
+  inout_pButton->eLastButtonEvent = E_BUTTON_EVENT_INVALID;
+}
+
+/**
+ * Taken from
+ * https://web.archive.org/web/20230223060958/http://www.ganssle.com/debouncing-pt2.htm
+ */
+void Button_GetDebouncedState(Button_Config_t *const inout_ptButton) {
+  ASSERT(inout_ptButton);
+
+  // Work with local copies due to better readability
+  u32 u32State = inout_ptButton->tDebounceFlags.u32State;
+  Button_PinState_e ePinState = Button_GetPinState(inout_ptButton);
+  bool bButtonPressed = (ePinState == E_BUTTON_STATE_PRESSED);
+
+  // Shift one bit, if the button is pressed otherwise shift a zero
+  u32State = (u32State << 1) | (bButtonPressed | 0);
+
+  u16 u16LongPressState = inout_ptButton->tDebounceFlags.u16LongPressState;
+  bool bLongPressTriggered = inout_ptButton->tDebounceFlags.bLongPressTriggered;
+
+  switch (u32State) {
+  case 0x0000FFFF: { // Short Press -> 16 Msec consistent shifting of ones
+    // Clear the current long button press progress so that it does not carry
+    // over to the next button press
+    bLongPressTriggered = false;
+    u16LongPressState = 0;
+    inout_ptButton->eLastButtonEvent = E_BUTTON_EVENT_PRESSED;
+  } break;
+
+  case 0xFFFF0000: { // Button Released -> Zeros are shifted in (16 Msec
+                     // consistent shifting of zeros)
+    // Clear the current long button press progress so that it does not carry
+    // over to the next button press
+    bLongPressTriggered = false;
+    u16LongPressState = 0;
+    inout_ptButton->eLastButtonEvent = E_BUTTON_EVENT_RELEASED;
+  } break;
+
+  case 0xFFFFFFFF: { // Long Press -> 32 Msec consistent shifting of ones
+                     // Button is held down
+    if (bLongPressTriggered == false) {
+      // The button needs to be held down for the long press duration, so that a
+      // real user-settable longpress can be detected
+      u16LongPressState++;
+      if (u16LongPressState == LONG_PRESS_PERIOD_MS) {
+        // Clear the current long button press progress so that it does not
+        // carry over to the next button press
+        bLongPressTriggered = true;
+        u16LongPressState = 0;
+        inout_ptButton->eLastButtonEvent = E_BUTTON_EVENT_LONG_PRESSED;
+      }
+    }
+  } break;
+
+  default:
+    // No action for other states
+    break;
+  }
+
+  // Update the parsed entries
+  inout_ptButton->tDebounceFlags.u32State = u32State;
+  inout_ptButton->tDebounceFlags.u16LongPressState = u16LongPressState;
+  inout_ptButton->tDebounceFlags.bLongPressTriggered = bLongPressTriggered;
+
+  return;
 }

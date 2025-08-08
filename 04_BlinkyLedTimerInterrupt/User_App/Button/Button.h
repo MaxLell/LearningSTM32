@@ -17,7 +17,14 @@ typedef enum {
   E_BUTTON_STATE_INVALID = 0,
   E_BUTTON_STATE_RELEASED = 1,
   E_BUTTON_STATE_PRESSED = 2,
-} Button_State_e;
+} Button_PinState_e;
+
+typedef enum {
+  E_BUTTON_EVENT_INVALID = -1,
+  E_BUTTON_EVENT_PRESSED,
+  E_BUTTON_EVENT_RELEASED,
+  E_BUTTON_EVENT_LONG_PRESSED,
+} Button_Event_e;
 
 /**
  * @brief Button polarity enumeration.
@@ -28,37 +35,29 @@ typedef enum {
   E_BUTTON_POLARITY_ACTIVE_HIGH,
 } Button_Polarity_e;
 
-/**
- * @brief Configuration structure for a button instance.
- *
- * Holds the state, polarity, and hardware configuration for a single button.
- */
 typedef struct {
-  Button_State_e eButtonState;
+  u16 u16LongPressState;
+  u32 u32State;
+  bool bLongPressTriggered;
+} Button_DebounceFlags_t;
+
+typedef struct {
+  Button_PinState_e eButtonState;
   Button_Polarity_e ePolarity;
+  Button_Event_e eLastButtonEvent;
+  Button_DebounceFlags_t tDebounceFlags;
   void *pGpioPort;
   u16 u16GpioPin;
-  bool bExtiIsrWasTriggered;
 } Button_Config_t;
 
-/**
- * @brief Reads and updates the current state of the button.
- *
- * Reads the GPIO pin and updates the button state in the configuration
- * structure.
- * @param[in,out] inout_pButton Pointer to the button configuration structure.
- * @return Button_State_e Current button state (pressed or released).
- */
-Button_State_e Button_GetState(Button_Config_t *inout_pButton);
+void Button_TimIsr(Button_Config_t *const inout_pButton);
 
-bool Button_WasPressed(Button_Config_t *inout_pButton);
+void Button_GetDebouncedState(Button_Config_t *const inout_ptButton);
 
-/**
- * @brief EXTI interrupt service routine for the button.
- *
- * Should be called from the EXTI ISR to signal a button event.
- * @param[in,out] inout_pButton Pointer to the button configuration structure.
- */
-void Button_ExtiIsr(Button_Config_t *inout_pButton);
+Button_PinState_e Button_GetPinState(Button_Config_t *const inout_pButton);
+
+Button_Event_e Button_GetLastEvent(Button_Config_t *const inout_pButton);
+
+void Button_ClearLastEvent(Button_Config_t *const inout_pButton);
 
 #endif /* BUTTON_BUTTON_H_ */
