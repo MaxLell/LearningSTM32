@@ -25,6 +25,7 @@ typedef struct {
 static BlinkyLed_Config_t tBlinkyLed;
 static Button_Config_t tButton;
 static IsrHandler_Entry_t atIsrVectorTable[E_ISR_ID_LAST];
+static UserMain_CombinedContext_t tCombinedContext;
 
 static void
 UserMain_CombinedCallback(UserMain_CombinedContext_t *const inout_ptContext);
@@ -49,8 +50,8 @@ void UserMain_Init() {
   tButton.tDebounceFlags.bLongPressTriggered = false;
 
   // Configure the IsrHandler to the Timer Interrupt
-  UserMain_CombinedContext_t tCombinedContext = {.pBlinkyLed = &tBlinkyLed,
-                                                 .pButton = &tButton};
+  tCombinedContext.pBlinkyLed = &tBlinkyLed;
+  tCombinedContext.pButton = &tButton;
 
   IsrHandler_Init(atIsrVectorTable, E_ISR_ID_LAST);
   IsrHandler_RegisterIsr(E_ISR_ID_COMBINED_BUTTON_AND_BLINKY_ISR,
@@ -74,7 +75,7 @@ void UserMain_CombinedCallback(
     UserMain_CombinedContext_t *const inout_ptContext) {
   ASSERT(inout_ptContext);
 
-  static volatile u8 u8NofMsecPassed;
+  static volatile u32 u32NofMsecPassed;
   static Profiler_Config_t tSpeedy;
 
   Profiler_Start(&tSpeedy);
@@ -89,10 +90,10 @@ void UserMain_CombinedCallback(
   // Toggle the LED based on said button event
   switch (eLastButtonEvent) {
   case E_BUTTON_EVENT_PRESSED:
-    u8NofMsecPassed = 0;
+    u32NofMsecPassed = 0;
     break;
   case E_BUTTON_EVENT_LONG_PRESSED:
-    if (BLINKY_LED_TOGGLE_INTERVAL == u8NofMsecPassed) {
+    if (BLINKY_LED_TOGGLE_INTERVAL == u32NofMsecPassed) {
       BlinkyLed_Toggle(inout_ptContext->pBlinkyLed);
     }
     break;
@@ -103,11 +104,9 @@ void UserMain_CombinedCallback(
     break;
   }
 
-  if (0xFF == u8NofMsecPassed) {
-    u8NofMsecPassed = 0;
+  if (0xFFFFFFFF == u32NofMsecPassed) {
+    u32NofMsecPassed = 0;
   }
-
-  u8NofMsecPassed++;
 
   Profiler_Stop(&tSpeedy);
 
