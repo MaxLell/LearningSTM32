@@ -15,8 +15,6 @@
 #include "../IsrHandler/IsrHandler.h"
 #include "../Profiler/Profiler.h"
 
-#include <stdio.h>
-
 #define BLINKY_LED_TOGGLE_INTERVAL (50U)
 
 typedef struct {
@@ -48,7 +46,7 @@ void UserMain_Init() {
   tButton.eButtonState = E_BUTTON_STATE_RELEASED;
   tButton.eLastButtonEvent = E_BUTTON_EVENT_INVALID;
   tButton.tDebounceFlags.u32BitState = 0;
-  tButton.tDebounceFlags.u16LongPressState = 0;
+  tButton.tDebounceFlags.u16LongPressedMsecCounter = 0;
   tButton.tDebounceFlags.bLongPressTriggered = false;
 
   // Configure the IsrHandler to the Timer Interrupt
@@ -87,15 +85,18 @@ void UserMain_CombinedCallback(
   Button_Event_e eLastButtonEvent =
       Button_GetLastEvent(inout_ptContext->pButton);
 
-  // Toggle the LED based on said button event
+  // Select the action to be taken for said button event
   switch (eLastButtonEvent) {
   case E_BUTTON_EVENT_PRESSED:
+    // Do nothing
     break;
   case E_BUTTON_EVENT_LONG_PRESSED:
+    // Enable the long press action
     bButtonLongPressed = true;
     u32NofMsecPassed = 0;
     break;
   case E_BUTTON_EVENT_RELEASED:
+    // Clear the LED
     BlinkyLed_Disable(inout_ptContext->pBlinkyLed);
     bButtonLongPressed = false;
     break;
@@ -106,11 +107,12 @@ void UserMain_CombinedCallback(
   Button_ClearLastEvent(inout_ptContext->pButton);
 
   if (bButtonLongPressed) {
-        if (u32NofMsecPassed % BLINKY_LED_TOGGLE_INTERVAL == 0) {
-          BlinkyLed_Toggle(inout_ptContext->pBlinkyLed);
-        }
+    if (u32NofMsecPassed % BLINKY_LED_TOGGLE_INTERVAL == 0) {
+      BlinkyLed_Toggle(inout_ptContext->pBlinkyLed);
+    }
   }
 
+  // Make sure there is no variable overrun
   if (0xFFFFFFF0 == u32NofMsecPassed) {
     u32NofMsecPassed = 0;
   } else {
