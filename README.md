@@ -15,10 +15,7 @@ Blink the led in response to an external interrupt, which originates from the bu
 ### 04_BlinkyLedTimerInterrupt
 Here the Led is toggled by a timer interrupt after a long button press. Also make sure to debounce the Button.
 
-### 05_ButtonToBlinkyWithTimerInterrupt
-Blink an LED with a fixed rate (triggered by a timer interrupt). A button interrupt changes the rate by which the LED is triggered
-
-### 06_RtosButtonToBlinky
+### 05_RtosButtonToBlinky
 - The Button is sampled by the input handler task
 - The Output Handler task configures the timer (blink rate) and the blink counter
 - The LED is toggled 10 times when a long press occured on the button. (To be done by the timer ist)
