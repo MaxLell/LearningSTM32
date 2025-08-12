@@ -9,7 +9,9 @@
 #include "../../Utils/CommonTypes.h"
 #include "../../Utils/CustomAssert.h"
 
-#define LONG_PRESS_PERIOD_MS 500
+#include <stdio.h>
+
+#define LONG_PRESS_PERIOD_MS 1000
 
 void Button_VerifyArguments(Button_Config_t *inout_pButton) {
   // Verify that the Button configuration is valid
@@ -58,24 +60,28 @@ void Button_ClearLastEvent(Button_Config_t *const inout_pButton) {
 }
 
 /**
- * Taken from
- * https://web.archive.org/web/20230223060958/http://www.ganssle.com/debouncing-pt2.htm
+ * Taken from https://www.ganssle.com/debouncing-pt2.htm
  */
 void Button_GetDebouncedState(Button_Config_t *const inout_ptButton) {
   ASSERT(inout_ptButton);
 
   // Work with local copies due to better readability
-  u32 u32State = inout_ptButton->tDebounceFlags.u32State;
+  u32 u32BitState = inout_ptButton->tDebounceFlags.u32BitState;
   Button_PinState_e ePinState = Button_GetPinState(inout_ptButton);
   bool bButtonPressed = (ePinState == E_BUTTON_STATE_PRESSED);
 
-  // Shift one bit, if the button is pressed otherwise shift a zero
-  u32State = (u32State << 1) | (bButtonPressed | 0);
+  // Shift one bit, if the button is pressed otherwise shift a zero (happens by
+  // default)
+  u32BitState = u32BitState << 1;
+  if (bButtonPressed) {
+    u32BitState |= 0x00000001;
+  }
 
   u16 u16LongPressState = inout_ptButton->tDebounceFlags.u16LongPressState;
   bool bLongPressTriggered = inout_ptButton->tDebounceFlags.bLongPressTriggered;
+  inout_ptButton->eLastButtonEvent = E_BUTTON_EVENT_INVALID;
 
-  switch (u32State) {
+  switch (u32BitState) {
   case 0x0000FFFF: { // Short Press -> 16 Msec consistent shifting of ones
     // Clear the current long button press progress so that it does not carry
     // over to the next button press
@@ -95,10 +101,12 @@ void Button_GetDebouncedState(Button_Config_t *const inout_ptButton) {
 
   case 0xFFFFFFFF: { // Long Press -> 32 Msec consistent shifting of ones
                      // Button is held down
+    inout_ptButton->eLastButtonEvent = E_BUTTON_EVENT_NO_EVENT;
     if (bLongPressTriggered == false) {
-      // The button needs to be held down for the long press duration, so that a
-      // real user-settable longpress can be detected
+      // The button needs to be held down for the long press duration, so that
+      // a real user-settable longpress can be detected
       u16LongPressState++;
+
       if (u16LongPressState == LONG_PRESS_PERIOD_MS) {
         // Clear the current long button press progress so that it does not
         // carry over to the next button press
@@ -110,14 +118,16 @@ void Button_GetDebouncedState(Button_Config_t *const inout_ptButton) {
   } break;
 
   default:
-    // No action for other states
+    inout_ptButton->eLastButtonEvent = E_BUTTON_EVENT_NO_EVENT;
     break;
   }
 
   // Update the parsed entries
-  inout_ptButton->tDebounceFlags.u32State = u32State;
+  inout_ptButton->tDebounceFlags.u32BitState = u32BitState;
   inout_ptButton->tDebounceFlags.u16LongPressState = u16LongPressState;
   inout_ptButton->tDebounceFlags.bLongPressTriggered = bLongPressTriggered;
+
+  ASSERT(inout_ptButton->eLastButtonEvent != E_BUTTON_EVENT_INVALID);
 
   return;
 }

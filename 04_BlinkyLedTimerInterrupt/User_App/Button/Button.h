@@ -24,6 +24,7 @@ typedef enum {
   E_BUTTON_EVENT_PRESSED,
   E_BUTTON_EVENT_RELEASED,
   E_BUTTON_EVENT_LONG_PRESSED,
+  E_BUTTON_EVENT_NO_EVENT,
 } Button_Event_e;
 
 /**
@@ -37,7 +38,7 @@ typedef enum {
 
 typedef struct {
   u16 u16LongPressState;
-  u32 u32State;
+  u32 u32BitState;
   bool bLongPressTriggered;
 } Button_DebounceFlags_t;
 

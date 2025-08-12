@@ -15,6 +15,8 @@
 #include "../IsrHandler/IsrHandler.h"
 #include "../Profiler/Profiler.h"
 
+#include <stdio.h>
+
 #define BLINKY_LED_TOGGLE_INTERVAL (50U)
 
 typedef struct {
@@ -45,7 +47,7 @@ void UserMain_Init() {
   tButton.ePolarity = E_BUTTON_POLARITY_ACTIVE_HIGH;
   tButton.eButtonState = E_BUTTON_STATE_RELEASED;
   tButton.eLastButtonEvent = E_BUTTON_EVENT_INVALID;
-  tButton.tDebounceFlags.u32State = 0;
+  tButton.tDebounceFlags.u32BitState = 0;
   tButton.tDebounceFlags.u16LongPressState = 0;
   tButton.tDebounceFlags.bLongPressTriggered = false;
 
@@ -76,9 +78,7 @@ void UserMain_CombinedCallback(
   ASSERT(inout_ptContext);
 
   static volatile u32 u32NofMsecPassed;
-  static Profiler_Config_t tSpeedy;
-
-  Profiler_Start(&tSpeedy);
+  static bool bButtonLongPressed = false;
 
   // Call the Button ISR
   Button_TimIsr(inout_ptContext->pButton);
@@ -90,28 +90,32 @@ void UserMain_CombinedCallback(
   // Toggle the LED based on said button event
   switch (eLastButtonEvent) {
   case E_BUTTON_EVENT_PRESSED:
-    u32NofMsecPassed = 0;
     break;
   case E_BUTTON_EVENT_LONG_PRESSED:
-    if (BLINKY_LED_TOGGLE_INTERVAL == u32NofMsecPassed) {
-      BlinkyLed_Toggle(inout_ptContext->pBlinkyLed);
-    }
+    bButtonLongPressed = true;
+    u32NofMsecPassed = 0;
     break;
   case E_BUTTON_EVENT_RELEASED:
     BlinkyLed_Disable(inout_ptContext->pBlinkyLed);
+    bButtonLongPressed = false;
     break;
   default:
     break;
   }
 
-  if (0xFFFFFFFF == u32NofMsecPassed) {
-    u32NofMsecPassed = 0;
+  Button_ClearLastEvent(inout_ptContext->pButton);
+
+  if (bButtonLongPressed) {
+        if (u32NofMsecPassed % BLINKY_LED_TOGGLE_INTERVAL == 0) {
+          BlinkyLed_Toggle(inout_ptContext->pBlinkyLed);
+        }
   }
 
-  Profiler_Stop(&tSpeedy);
-
-  volatile f32 fUsec = Profiler_GetUsec(&tSpeedy);
-  UNUSED(fUsec);
+  if (0xFFFFFFF0 == u32NofMsecPassed) {
+    u32NofMsecPassed = 0;
+  } else {
+    u32NofMsecPassed++;
+  }
 }
 
 #endif /* USER_MAIN_C_ */
