@@ -40,7 +40,7 @@ void OutputHandler_Loop() {
   if (bLongPressDetected) {
     BlinkyLed_Toggle(&tBlinkyLed);
     osDelay(50);
+  } else {
+    osDelay(1);
   }
-
-  osDelay(1);
 }

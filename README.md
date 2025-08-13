@@ -26,10 +26,10 @@ Here the Led is toggled by a timer interrupt after a long button press. Also mak
 Loop-driven UART output: print a fixed string to a terminal emulator.
 
 ## 12_PolledCharEcho
-Polled UART input: read a character in from the terminal emulator and print it back out (echo it). This is the first step in implementing a CLI (Command Line Interface).
+Polled UART input: read a character in from the terminal emulator and print it back out (echo it). This is the first step in implementing a CLI (Command Line Interface). Only print back one input char
 
 ## 13_InterruptDrivenCharEcho
-Interrupt-driven UART input: echo based on input interrupt.
+Interrupt-driven UART input: echo based on input interrupt. Same as before - only report back one character
 
 ## 14_CliGetVersionWithInterrupt
  Interrupt-driven UART CLI: accumulate input characters into a string; on receipt of a CR (Carriage Return), interpret the string as a command in non-interrupt context (for instance, a "version" command that prints a version string). This is the first command in a CLI, and the first major separation of interrupt and non-interrupt code sharing data.
