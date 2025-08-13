@@ -62,9 +62,9 @@ typedef struct {
 /**
  * @brief Call this function from a 1kHz timer interrupt to update the button
  * state.
- * @param[in,out] inout_pButton Pointer to the button configuration structure.
+ * @param[in,out] inout_ptButton Pointer to the button configuration structure.
  */
-void Button_TimIsr(Button_Config_t *const inout_pButton);
+void Button_TimIsr(Button_Config_t *const inout_ptButton);
 
 /**
  * @brief Update the debounced state and event of the button.
@@ -74,22 +74,22 @@ void Button_GetDebouncedState(Button_Config_t *const inout_ptButton);
 
 /**
  * @brief Read the current (raw) pin state and update the debounced state.
- * @param[in,out] inout_pButton Pointer to the button configuration structure.
+ * @param[in,out] inout_ptButton Pointer to the button configuration structure.
  * @return The debounced pin state.
  */
-Button_PinState_e Button_GetPinState(Button_Config_t *const inout_pButton);
+Button_PinState_e Button_GetPinState(Button_Config_t *const inout_ptButton);
 
 /**
  * @brief Get the last detected button event.
- * @param[in,out] inout_pButton Pointer to the button configuration structure.
+ * @param[in,out] inout_ptButton Pointer to the button configuration structure.
  * @return The last button event.
  */
-Button_Event_e Button_GetLastEvent(Button_Config_t *const inout_pButton);
+Button_Event_e Button_GetLastEvent(Button_Config_t *const inout_ptButton);
 
 /**
  * @brief Clear the last detected button event.
- * @param[in,out] inout_pButton Pointer to the button configuration structure.
+ * @param[in,out] inout_ptButton Pointer to the button configuration structure.
  */
-void Button_ClearLastEvent(Button_Config_t *const inout_pButton);
+void Button_ClearLastEvent(Button_Config_t *const inout_ptButton);
 
 #endif /* BUTTON_BUTTON_H_ */
