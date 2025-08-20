@@ -15,14 +15,16 @@ void UserMain_Init() {}
 
 void UserMain_Loop() {}
 
-void UserMain(void) {
-  // Init
-  UserMain_Init();
+void UserMain(void)
+{
+    // Init
+    UserMain_Init();
 
-  // Loop
-  for (;;) {
-    UserMain_Loop();
-  }
+    // Loop
+    for (;;)
+    {
+        UserMain_Loop();
+    }
 }
 
 #endif /* USER_MAIN_C_ */

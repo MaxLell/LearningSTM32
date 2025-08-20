@@ -15,9 +15,10 @@
  *
  * Holds the start and stop cycle counts for a profiling session.
  */
-typedef struct {
-  u32 u32StartCycles;
-  u32 u32StopCycles;
+typedef struct
+{
+    u32 u32StartCycles;
+    u32 u32StopCycles;
 } Profiler_Config_t;
 
 /**

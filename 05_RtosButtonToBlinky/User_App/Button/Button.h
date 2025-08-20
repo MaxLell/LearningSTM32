@@ -15,48 +15,55 @@
 /**
  * @brief Button state enumeration.
  */
-typedef enum {
-  E_BUTTON_STATE_INVALID = 0,
-  E_BUTTON_STATE_RELEASED = 1,
-  E_BUTTON_STATE_PRESSED = 2,
+typedef enum
+{
+    E_BUTTON_STATE_INVALID = 0,
+    E_BUTTON_STATE_RELEASED = 1,
+    E_BUTTON_STATE_PRESSED = 2,
 } Button_PinState_e;
 
-typedef enum {
-  E_BUTTON_EVENT_INVALID = -1,
-  E_BUTTON_EVENT_PRESSED,
-  E_BUTTON_EVENT_RELEASED,
-  E_BUTTON_EVENT_LONG_PRESSED,
-  E_BUTTON_EVENT_NO_EVENT,
+typedef enum
+{
+    E_BUTTON_EVENT_INVALID = -1,
+    E_BUTTON_EVENT_PRESSED,
+    E_BUTTON_EVENT_RELEASED,
+    E_BUTTON_EVENT_LONG_PRESSED,
+    E_BUTTON_EVENT_NO_EVENT,
 } Button_Event_e;
 
 /**
  * @brief Button polarity enumeration.
  */
-typedef enum {
-  E_BUTTON_POLARITY_INVALID = 0,
-  E_BUTTON_POLARITY_ACTIVE_LOW,
-  E_BUTTON_POLARITY_ACTIVE_HIGH,
+typedef enum
+{
+    E_BUTTON_POLARITY_INVALID = 0,
+    E_BUTTON_POLARITY_ACTIVE_LOW,
+    E_BUTTON_POLARITY_ACTIVE_HIGH,
 } Button_Polarity_e;
 
 /**
  * @brief Debounce state flags for a button.
  */
-typedef struct {
-  u16 u16LongPressedMsecCounter; /**< Counter for long press detection. */
-  u32 u32BitState;               /**< Bit-shift register for debouncing. */
-  bool bLongPressTriggered; /**< Indicates if long press event was triggered. */
+typedef struct
+{
+    u16 u16LongPressedMsecCounter; /**< Counter for long press detection. */
+    u32 u32BitState;               /**< Bit-shift register for debouncing. */
+    bool bLongPressTriggered; /**< Indicates if long press event was triggered.
+                               */
 } Button_DebounceFlags_t;
 
 /**
  * @brief Button configuration and state structure.
  */
-typedef struct {
-  Button_PinState_e eButtonState;  /**< Current debounced button state. */
-  Button_Polarity_e ePolarity;     /**< Button polarity (active high/low). */
-  Button_Event_e eLastButtonEvent; /**< Last detected button event. */
-  Button_DebounceFlags_t tDebounceFlags; /**< Debounce and long press state. */
-  void *pGpioPort;                       /**< GPIO port pointer. */
-  u16 u16GpioPin;                        /**< GPIO pin number. */
+typedef struct
+{
+    Button_PinState_e eButtonState;  /**< Current debounced button state. */
+    Button_Polarity_e ePolarity;     /**< Button polarity (active high/low). */
+    Button_Event_e eLastButtonEvent; /**< Last detected button event. */
+    Button_DebounceFlags_t
+        tDebounceFlags; /**< Debounce and long press state. */
+    void *pGpioPort;    /**< GPIO port pointer. */
+    u16 u16GpioPin;     /**< GPIO pin number. */
 } Button_Config_t;
 
 /**

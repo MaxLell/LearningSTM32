@@ -13,34 +13,40 @@
 
 BlinkyLed_Config_t tBlinkyLed = {0};
 
-void OutputHandler_Init() {
-  tBlinkyLed.u16GpioPin = LED2_PIN;
-  tBlinkyLed.pGpioPort = LED2_GPIO_PORT;
-  tBlinkyLed.eLedState = E_BLINKY_LED_OFF;
+void OutputHandler_Init()
+{
+    tBlinkyLed.u16GpioPin = LED2_PIN;
+    tBlinkyLed.pGpioPort = LED2_GPIO_PORT;
+    tBlinkyLed.eLedState = E_BLINKY_LED_OFF;
 }
 
-void OutputHandler_Loop() {
-  static bool bLongPressDetected = false;
-  InterfaceButton_Event_e eEvent = InterfaceButton_getEvent();
-  switch (eEvent) {
-  case E_INTERFACE_BUTTON_EVENT_PRESSED:
-    BlinkyLed_Enable(&tBlinkyLed);
-    break;
-  case E_INTERFACE_BUTTON_EVENT_LONG_PRESSED:
-    bLongPressDetected = true;
-    break;
-  case E_INTERFACE_BUTTON_EVENT_RELEASED:
-    BlinkyLed_Disable(&tBlinkyLed);
-    bLongPressDetected = false;
-    break;
-  default:
-    break;
-  }
+void OutputHandler_Loop()
+{
+    static bool bLongPressDetected = false;
+    InterfaceButton_Event_e eEvent = InterfaceButton_getEvent();
+    switch (eEvent)
+    {
+    case E_INTERFACE_BUTTON_EVENT_PRESSED:
+        BlinkyLed_Enable(&tBlinkyLed);
+        break;
+    case E_INTERFACE_BUTTON_EVENT_LONG_PRESSED:
+        bLongPressDetected = true;
+        break;
+    case E_INTERFACE_BUTTON_EVENT_RELEASED:
+        BlinkyLed_Disable(&tBlinkyLed);
+        bLongPressDetected = false;
+        break;
+    default:
+        break;
+    }
 
-  if (bLongPressDetected) {
-    BlinkyLed_Toggle(&tBlinkyLed);
-    osDelay(50);
-  } else {
-    osDelay(1);
-  }
+    if (bLongPressDetected)
+    {
+        BlinkyLed_Toggle(&tBlinkyLed);
+        osDelay(50);
+    }
+    else
+    {
+        osDelay(1);
+    }
 }

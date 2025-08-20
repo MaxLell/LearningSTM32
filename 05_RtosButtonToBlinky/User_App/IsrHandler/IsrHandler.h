@@ -23,9 +23,10 @@ typedef void (*IsrCallback_t)(const void *pContext);
  *
  * Holds the callback and context pointer for a registered interrupt.
  */
-typedef struct {
-  IsrCallback_t pfCallback;
-  const void *ptContext;
+typedef struct
+{
+    IsrCallback_t pfCallback;
+    const void *ptContext;
 } IsrHandler_Entry_t;
 
 /**

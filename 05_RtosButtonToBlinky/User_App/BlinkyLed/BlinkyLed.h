@@ -13,17 +13,22 @@
 /**
  * @brief LED state enumeration for BlinkyLed module.
  */
-typedef enum { E_BLINKY_LED_OFF = 0, E_BLINKY_LED_ON = 1 } BlinkyLed_State_e;
+typedef enum
+{
+    E_BLINKY_LED_OFF = 0,
+    E_BLINKY_LED_ON = 1
+} BlinkyLed_State_e;
 
 /**
  * @brief Configuration structure for a Blinky LED instance.
  *
  * Holds the state and hardware configuration for a single LED.
  */
-typedef struct {
-  BlinkyLed_State_e eLedState;
-  void *pGpioPort;
-  u16 u16GpioPin;
+typedef struct
+{
+    BlinkyLed_State_e eLedState;
+    void *pGpioPort;
+    u16 u16GpioPin;
 } BlinkyLed_Config_t;
 
 /**
