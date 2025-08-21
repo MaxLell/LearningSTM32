@@ -100,9 +100,11 @@
     - +:test/**
     - -:test/support
   :source:
-    - src/**
+    - User_App/**
+    - Utils/**
   :include:
-    - src/** # In simple projects, this entry often duplicates :source
+    - User_App/**
+    - Utils/**
   :support:
     - test/support
   :libraries: []
