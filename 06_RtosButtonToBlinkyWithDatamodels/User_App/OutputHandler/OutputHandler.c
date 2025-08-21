@@ -47,6 +47,7 @@ void OutputHandler_Loop()
         Button_Event_e eButtonEvent = E_BUTTON_EVENT_INVALID;
         u32 u32Size = 0;
         DataModel_Read(g_ptButtonEvent, &eButtonEvent, &u32Size);
+        ASSERT(u32Size == sizeof(Button_Event_e));
 
         switch (eButtonEvent)
         {

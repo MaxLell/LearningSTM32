@@ -1,5 +1,6 @@
 #include "DataModel.h"
 #include <CustomAssert.h>
+#include <stdio.h>
 
 // ################################################################################
 // static function declarations
@@ -70,9 +71,12 @@ void DataModel_Init(DataModel_t *const inout_ptDataModel)
 
 void DataModel_Write(DataModel_t *const inout_ptDataModel,
                      const void *const in_ptDataBytes,
-                     const u32 in_tDataSizeBytes)
+                     const size_t in_tDataSizeBytes)
 {
     { // Input Checks
+        ASSERT(inout_ptDataModel);
+        ASSERT(DATAMODEL_MAX_CONTENT_SIZE_BYTES >=
+               inout_ptDataModel->u8ContentSizeBytes);
         ASSERT(true == inout_ptDataModel->bIsInitialized);
         ASSERT(in_ptDataBytes);
         ASSERT(DATAMODEL_MAX_CONTENT_SIZE_BYTES > in_tDataSizeBytes);
@@ -81,6 +85,9 @@ void DataModel_Write(DataModel_t *const inout_ptDataModel,
     // Copy the data into the content pointer
     DataModel_CopyBytes((u8 *)inout_ptDataModel->au8Content,
                         (const u8 *)in_ptDataBytes, in_tDataSizeBytes);
+
+    // Update the internally stored content size
+    inout_ptDataModel->u8ContentSizeBytes = in_tDataSizeBytes;
 
     // Notify observers about the data change
     DataModel_NotifyObservers(inout_ptDataModel);
@@ -98,7 +105,9 @@ void DataModel_Read(const DataModel_t *const in_ptDataModel,
     { // Input Checks
         ASSERT(in_ptDataModel);
         ASSERT(in_ptDataModel->bIsInitialized);
-        ASSERT(in_ptDataModel->au8Content);
+        ASSERT(DATAMODEL_MAX_CONTENT_SIZE_BYTES >=
+               in_ptDataModel->u8ContentSizeBytes);
+
         ASSERT(out_ptDataBytes);
         ASSERT(out_ptDataSize);
         ASSERT(*out_ptDataSize == 0);
@@ -107,7 +116,10 @@ void DataModel_Read(const DataModel_t *const in_ptDataModel,
     // Copy the bytes from the stored content into the output buffer
     DataModel_CopyBytes((u8 *)out_ptDataBytes,
                         (const u8 *)in_ptDataModel->au8Content,
-                        *out_ptDataSize);
+                        in_ptDataModel->u8ContentSizeBytes);
+
+    // Set the output data size
+    *out_ptDataSize = in_ptDataModel->u8ContentSizeBytes;
 
     // Check Canary Words
     DataModel_CheckCanaryWords(in_ptDataModel);
@@ -265,7 +277,7 @@ void DataModel_CopyBytes(u8 *au8Destination, const u8 *au8Source,
         ASSERT(au8Destination);
         ASSERT(au8Source);
     }
-    for (size_t i = 0; i < tNofBytes; ++i)
+    for (size_t i = 0; i < tNofBytes; i++)
     {
         au8Destination[i] = au8Source[i];
     }

@@ -38,6 +38,9 @@ typedef struct
     /** @brief Content buffer. */
     u8 au8Content[DATAMODEL_MAX_CONTENT_SIZE_BYTES];
 
+    /** @brief Size of the content in bytes. */
+    u8 u8ContentSizeBytes;
+
     /** @brief Data validity flag. */
     bool bIsDataValid;
 
@@ -69,15 +72,15 @@ void DataModel_Init(DataModel_t *const inout_ptDataModel);
  */
 void DataModel_Write(DataModel_t *const inout_ptDataModel,
                      const void *const in_ptDataBytes,
-                     const u32 in_tDataSizeBytes);
+                     const size_t in_tDataSizeBytes);
 
 /**
  * @brief Reads data from the DataModel.
- * @param[in] in_ptDataModel Pointer to DataModel instance (must point to valid
- * static or heap-allocated memory).
+ * @param[in] in_ptDataModel Pointer to DataModel instance (must point to
+ * valid static or heap-allocated memory).
  * @param[out] out_ptDataBytes Pointer to buffer where data will be copied.
- * @param[in,out] out_ptDataSize Pointer to size variable; input: buffer size,
- * output: actual data size.
+ * @param[in,out] out_ptDataSize Pointer to size variable; input: buffer
+ * size, output: actual data size.
  * @details The DataModel must be allocated either statically or on the heap
  * before calling this function.
  */

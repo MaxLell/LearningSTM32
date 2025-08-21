@@ -33,9 +33,6 @@
             printf("#########################\n");                             \
             printf("----> Condition: (%s)\n", #in_pCondition);                 \
             printf("----> File: %s:%d\n", __FILE__, __LINE__);                 \
-            while (1)                                                          \
-            {                                                                  \
-            }                                                                  \
         }                                                                      \
     } while (false)
 #endif /* TEST */
