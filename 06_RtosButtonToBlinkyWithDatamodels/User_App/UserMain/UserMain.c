@@ -15,13 +15,13 @@ void UserMain_Init() {}
 
 void UserMain_Loop() {}
 
-void UserMain(void)
+void UserMain( void )
 {
     // Init
     UserMain_Init();
 
     // Loop
-    for (;;)
+    for( ;; )
     {
         UserMain_Loop();
     }

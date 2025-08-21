@@ -3,38 +3,38 @@
 
 #include <stdio.h>
 #ifndef TEST
-#define ASSERT(in_pCondition)                                                  \
+#define ASSERT( in_pCondition )                                                \
     do                                                                         \
     {                                                                          \
-        if (!(in_pCondition))                                                  \
+        if( !( in_pCondition ) )                                               \
         {                                                                      \
-            printf("\n\n");                                                    \
-            printf("#########################\n");                             \
-            printf("#      ASSERT FAILED    #\n");                             \
-            printf("#########################\n");                             \
-            printf("----> Condition: (%s)\n", #in_pCondition);                 \
-            printf("----> File: %s:%d\n", __FILE__, __LINE__);                 \
-            __asm("BKPT #0");                                                  \
-            while (1)                                                          \
+            printf( "\n\n" );                                                  \
+            printf( "#########################\n" );                           \
+            printf( "#      ASSERT FAILED    #\n" );                           \
+            printf( "#########################\n" );                           \
+            printf( "----> Condition: (%s)\n", #in_pCondition );               \
+            printf( "----> File: %s:%d\n", __FILE__, __LINE__ );               \
+            __asm( "BKPT #0" );                                                \
+            while( 1 )                                                         \
             {                                                                  \
             }                                                                  \
         }                                                                      \
-    } while (false)
+    } while( false )
 
 #else
-#define ASSERT(in_pCondition)                                                  \
+#define ASSERT( in_pCondition )                                                \
     do                                                                         \
     {                                                                          \
-        if (!(in_pCondition))                                                  \
+        if( !( in_pCondition ) )                                               \
         {                                                                      \
-            printf("\n\n");                                                    \
-            printf("#########################\n");                             \
-            printf("#      ASSERT FAILED    #\n");                             \
-            printf("#########################\n");                             \
-            printf("----> Condition: (%s)\n", #in_pCondition);                 \
-            printf("----> File: %s:%d\n", __FILE__, __LINE__);                 \
+            printf( "\n\n" );                                                  \
+            printf( "#########################\n" );                           \
+            printf( "#      ASSERT FAILED    #\n" );                           \
+            printf( "#########################\n" );                           \
+            printf( "----> Condition: (%s)\n", #in_pCondition );               \
+            printf( "----> File: %s:%d\n", __FILE__, __LINE__ );               \
         }                                                                      \
-    } while (false)
+    } while( false )
 #endif /* TEST */
 
 #endif /* CUSTOM_ASSERT_H */

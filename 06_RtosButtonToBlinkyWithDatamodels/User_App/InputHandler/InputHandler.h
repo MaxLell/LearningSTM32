@@ -10,8 +10,8 @@
 
 #include "../DataModel/DataModel.h"
 
-void InputHandler_Init(DataModel_t *const inout_ptButtonEvent);
+void InputHandler_Init( DataModel_t *const inout_ptButtonEvent );
 
-void InputHandler_Loop(void);
+void InputHandler_Loop( void );
 
 #endif /* INPUTHANDLER_H */

@@ -4,10 +4,10 @@
 
 #include "CommonTypes.h"
 
-#define DATAMODEL_MAX_CONTENT_SIZE_BYTES (10U)
-#define DATAMODEL_MAX_OBSERVERS (5U)
-#define DATAMODEL_CANARY_VALUE (0xA5A5A5A5U)
-#define DATAMODEL_PLACEHOLDER (0xFFFFFFFFU)
+#define DATAMODEL_MAX_CONTENT_SIZE_BYTES ( 10U )
+#define DATAMODEL_MAX_OBSERVERS          ( 5U )
+#define DATAMODEL_CANARY_VALUE           ( 0xA5A5A5A5U )
+#define DATAMODEL_PLACEHOLDER            ( 0xFFFFFFFFU )
 
 /**
  * @brief Observer structure for notification callbacks.
@@ -18,7 +18,7 @@ typedef struct
     u32 u32Id;
 
     /** @brief Pointer to the notification callback function. */
-    void (*pFnNotification)(void);
+    void ( *pFnNotification )( void );
 } Observer_t;
 
 /**
@@ -58,7 +58,7 @@ typedef struct
  * @details The DataModel must be allocated either statically or on the heap
  * before calling this function.
  */
-void DataModel_Init(DataModel_t *const inout_ptDataModel);
+void DataModel_Init( DataModel_t *const inout_ptDataModel );
 
 /**
  * @brief Writes data to the DataModel.
@@ -70,9 +70,9 @@ void DataModel_Init(DataModel_t *const inout_ptDataModel);
  * @details The DataModel must be allocated either statically or on the heap
  * before calling this function.
  */
-void DataModel_Write(DataModel_t *const inout_ptDataModel,
-                     const void *const in_ptDataBytes,
-                     const size_t in_tDataSizeBytes);
+void DataModel_Write( DataModel_t *const inout_ptDataModel,
+                      const void *const  in_ptDataBytes,
+                      const size_t       in_tDataSizeBytes );
 
 /**
  * @brief Reads data from the DataModel.
@@ -84,8 +84,8 @@ void DataModel_Write(DataModel_t *const inout_ptDataModel,
  * @details The DataModel must be allocated either statically or on the heap
  * before calling this function.
  */
-void DataModel_Read(const DataModel_t *const in_ptDataModel,
-                    void *const out_ptDataBytes, u32 *const out_ptDataSize);
+void DataModel_Read( const DataModel_t *const in_ptDataModel,
+                     void *const out_ptDataBytes, u32 *const out_ptDataSize );
 
 /**
  * @brief Checks if the DataModel contains valid data.
@@ -93,7 +93,7 @@ void DataModel_Read(const DataModel_t *const in_ptDataModel,
  * static or heap-allocated memory).
  * @return true if data is valid, false otherwise.
  */
-bool DataModel_IsValid(const DataModel_t *const in_ptDataModel);
+bool DataModel_IsValid( const DataModel_t *const in_ptDataModel );
 
 /**
  * @brief Sets the validity flag of the DataModel.
@@ -101,7 +101,7 @@ bool DataModel_IsValid(const DataModel_t *const in_ptDataModel);
  * valid static or heap-allocated memory).
  * @param[in] bIsValid Validity flag to set.
  */
-void DataModel_SetValidity(DataModel_t *const inout_ptDataModel, bool bIsValid);
+void DataModel_SetValidity( DataModel_t *const inout_ptDataModel, bool bIsValid );
 
 /**
  * @brief Adds an observer to the DataModel.
@@ -109,8 +109,8 @@ void DataModel_SetValidity(DataModel_t *const inout_ptDataModel, bool bIsValid);
  * valid static or heap-allocated memory).
  * @param[in] in_ptObserver Pointer to observer to add.
  */
-void DataModel_AddObserver(DataModel_t *const inout_ptDataModel,
-                           const Observer_t *const in_ptObserver);
+void DataModel_AddObserver( DataModel_t *const      inout_ptDataModel,
+                            const Observer_t *const in_ptObserver );
 
 /**
  * @brief Removes an observer from the DataModel.
@@ -118,8 +118,8 @@ void DataModel_AddObserver(DataModel_t *const inout_ptDataModel,
  * valid static or heap-allocated memory).
  * @param[in] in_ptObserver Pointer to observer to remove.
  */
-void DataModel_RemoveObserver(DataModel_t *const inout_ptDataModel,
-                              const Observer_t *const in_ptObserver);
+void DataModel_RemoveObserver( DataModel_t *const      inout_ptDataModel,
+                               const Observer_t *const in_ptObserver );
 
 /**
  * @brief Returns the number of attached observers in the DataModel.
@@ -127,7 +127,6 @@ void DataModel_RemoveObserver(DataModel_t *const inout_ptDataModel,
  * static or heap-allocated memory).
  * @return Number of attached observers.
  */
-u32 DataModel_GetNumberOfAttachedObservers(
-    const DataModel_t *const in_ptDataModel);
+u32 DataModel_GetNumberOfAttachedObservers( const DataModel_t *const in_ptDataModel );
 
 #endif // DATAMODEL_H

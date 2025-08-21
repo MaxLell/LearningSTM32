@@ -8,6 +8,6 @@
 #ifndef USER_MAIN_H_
 #define USER_MAIN_H_
 
-void UserMain(void);
+void UserMain( void );
 
 #endif /* USER_MAIN_H_ */
