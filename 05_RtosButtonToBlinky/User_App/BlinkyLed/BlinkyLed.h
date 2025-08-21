@@ -27,8 +27,8 @@ typedef enum
 typedef struct
 {
     BlinkyLed_State_e eLedState;
-    void *pGpioPort;
-    u16 u16GpioPin;
+    void             *pGpioPort;
+    u16               u16GpioPin;
 } BlinkyLed_Config_t;
 
 /**
@@ -37,7 +37,7 @@ typedef struct
  * Sets the GPIO pin to the active state and updates the configuration.
  * @param[in,out] inout_pSelf Pointer to the LED configuration structure.
  */
-void BlinkyLed_Enable(BlinkyLed_Config_t *inout_pSelf);
+void BlinkyLed_Enable( BlinkyLed_Config_t *inout_pSelf );
 
 /**
  * @brief Turns the LED off.
@@ -45,7 +45,7 @@ void BlinkyLed_Enable(BlinkyLed_Config_t *inout_pSelf);
  * Sets the GPIO pin to the inactive state and updates the configuration.
  * @param[in,out] inout_pSelf Pointer to the LED configuration structure.
  */
-void BlinkyLed_Disable(BlinkyLed_Config_t *inout_pSelf);
+void BlinkyLed_Disable( BlinkyLed_Config_t *inout_pSelf );
 
 /**
  * @brief Toggles the LED state.
@@ -54,6 +54,6 @@ void BlinkyLed_Disable(BlinkyLed_Config_t *inout_pSelf);
  * configuration.
  * @param[in,out] inout_pSelf Pointer to the LED configuration structure.
  */
-void BlinkyLed_Toggle(BlinkyLed_Config_t *inout_pSelf);
+void BlinkyLed_Toggle( BlinkyLed_Config_t *inout_pSelf );
 
 #endif /* BLINKYLED_BLINKYLED_H_ */

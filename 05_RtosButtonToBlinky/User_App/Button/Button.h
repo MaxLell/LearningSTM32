@@ -46,8 +46,8 @@ typedef enum
  */
 typedef struct
 {
-    u16 u16LongPressedMsecCounter; /**< Counter for long press detection. */
-    u32 u32BitState;               /**< Bit-shift register for debouncing. */
+    u16  u16LongPressedMsecCounter; /**< Counter for long press detection. */
+    u32  u32BitState;               /**< Bit-shift register for debouncing. */
     bool bLongPressTriggered; /**< Indicates if long press event was triggered.
                                */
 } Button_DebounceFlags_t;
@@ -57,13 +57,13 @@ typedef struct
  */
 typedef struct
 {
-    Button_PinState_e eButtonState;  /**< Current debounced button state. */
-    Button_Polarity_e ePolarity;     /**< Button polarity (active high/low). */
-    Button_Event_e eLastButtonEvent; /**< Last detected button event. */
-    Button_DebounceFlags_t
-        tDebounceFlags; /**< Debounce and long press state. */
-    void *pGpioPort;    /**< GPIO port pointer. */
-    u16 u16GpioPin;     /**< GPIO pin number. */
+    Button_PinState_e      eButtonState; /**< Current debounced button state. */
+    Button_Polarity_e      ePolarity; /**< Button polarity (active high/low). */
+    Button_Event_e         eLastButtonEvent; /**< Last detected button event. */
+    Button_DebounceFlags_t tDebounceFlags;   /**< Debounce and long press state.
+                                              */
+    void *pGpioPort;                         /**< GPIO port pointer. */
+    u16   u16GpioPin;                        /**< GPIO pin number. */
 } Button_Config_t;
 
 /**
@@ -71,32 +71,32 @@ typedef struct
  * state.
  * @param[in,out] inout_ptButton Pointer to the button configuration structure.
  */
-void Button_TimIsr(Button_Config_t *const inout_ptButton);
+void Button_TimIsr( Button_Config_t *const inout_ptButton );
 
 /**
  * @brief Update the debounced state and event of the button.
  * @param[in,out] inout_ptButton Pointer to the button configuration structure.
  */
-void Button_GetDebouncedState(Button_Config_t *const inout_ptButton);
+void Button_GetDebouncedState( Button_Config_t *const inout_ptButton );
 
 /**
  * @brief Read the current (raw) pin state and update the debounced state.
  * @param[in,out] inout_ptButton Pointer to the button configuration structure.
  * @return The debounced pin state.
  */
-Button_PinState_e Button_GetPinState(Button_Config_t *const inout_ptButton);
+Button_PinState_e Button_GetPinState( Button_Config_t *const inout_ptButton );
 
 /**
  * @brief Get the last detected button event.
  * @param[in,out] inout_ptButton Pointer to the button configuration structure.
  * @return The last button event.
  */
-Button_Event_e Button_GetLastEvent(Button_Config_t *const inout_ptButton);
+Button_Event_e Button_GetLastEvent( Button_Config_t *const inout_ptButton );
 
 /**
  * @brief Clear the last detected button event.
  * @param[in,out] inout_ptButton Pointer to the button configuration structure.
  */
-void Button_ClearLastEvent(Button_Config_t *const inout_ptButton);
+void Button_ClearLastEvent( Button_Config_t *const inout_ptButton );
 
 #endif /* BUTTON_BUTTON_H_ */

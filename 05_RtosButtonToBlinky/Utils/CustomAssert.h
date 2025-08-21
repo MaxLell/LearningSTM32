@@ -1,13 +1,40 @@
 #ifndef CUSTOM_ASSERT_H
 #define CUSTOM_ASSERT_H
 
-void custom_assert_failed(const char *condition, const char *file, int line);
+#include <stdio.h>
+#ifndef TEST
+#define ASSERT( in_pCondition )                                                \
+    do                                                                         \
+    {                                                                          \
+        if( !( in_pCondition ) )                                               \
+        {                                                                      \
+            printf( "\n\n" );                                                  \
+            printf( "#########################\n" );                           \
+            printf( "#      ASSERT FAILED    #\n" );                           \
+            printf( "#########################\n" );                           \
+            printf( "----> Condition: (%s)\n", #in_pCondition );               \
+            printf( "----> File: %s:%d\n", __FILE__, __LINE__ );               \
+            __asm( "BKPT #0" );                                                \
+            while( 1 )                                                         \
+            {                                                                  \
+            }                                                                  \
+        }                                                                      \
+    } while( false )
 
-#define ASSERT(condition)                                                      \
-  do {                                                                         \
-    if (!(condition)) {                                                        \
-      custom_assert_failed(#condition, __FILE__, __LINE__);                    \
-    }                                                                          \
-  } while (false)
+#else
+#define ASSERT( in_pCondition )                                                \
+    do                                                                         \
+    {                                                                          \
+        if( !( in_pCondition ) )                                               \
+        {                                                                      \
+            printf( "\n\n" );                                                  \
+            printf( "#########################\n" );                           \
+            printf( "#      ASSERT FAILED    #\n" );                           \
+            printf( "#########################\n" );                           \
+            printf( "----> Condition: (%s)\n", #in_pCondition );               \
+            printf( "----> File: %s:%d\n", __FILE__, __LINE__ );               \
+        }                                                                      \
+    } while( false )
+#endif /* TEST */
 
 #endif /* CUSTOM_ASSERT_H */
