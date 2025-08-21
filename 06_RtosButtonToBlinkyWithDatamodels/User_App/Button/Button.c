@@ -66,7 +66,7 @@ Button_Event_e Button_GetLastEvent(Button_Config_t *const inout_ptButton)
 void Button_ClearLastEvent(Button_Config_t *const inout_ptButton)
 {
     Button_VerifyArguments(inout_ptButton);
-    inout_ptButton->eLastButtonEvent = E_BUTTON_EVENT_INVALID;
+    inout_ptButton->eLastButtonEvent = E_BUTTON_EVENT_NO_EVENT;
 }
 
 /**

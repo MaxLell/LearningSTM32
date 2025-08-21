@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "../../User_App/InputHandler/InputHandler.h"
 #include "../../User_App/OutputHandler/OutputHandler.h"
+#include "../../User_App/DataModel/DataModel.h"
 
 /* USER CODE END Includes */
 
@@ -47,6 +48,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
+
+static DataModel_t g_tButtonEvent = {0};
 
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
@@ -87,6 +90,7 @@ void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 void MX_FREERTOS_Init(void)
 {
     /* USER CODE BEGIN Init */
+    DataModel_Init(&g_tButtonEvent);
 
     /* USER CODE END Init */
 
@@ -157,7 +161,7 @@ void InputHandler(void *argument)
 {
     /* USER CODE BEGIN InputHandler */
     /* Initialize the Input Handler */
-    InputHandler_Init();
+    InputHandler_Init(&g_tButtonEvent);
     /* Infinite loop */
     for (;;)
     {
@@ -177,7 +181,7 @@ void InputHandler(void *argument)
 void OutputHandler(void *argument)
 {
     /* USER CODE BEGIN OutputHandler */
-    OutputHandler_Init();
+    OutputHandler_Init(&g_tButtonEvent);
     /* Infinite loop */
     for (;;)
     {

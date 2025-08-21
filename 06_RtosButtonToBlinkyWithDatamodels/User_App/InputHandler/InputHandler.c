@@ -8,14 +8,13 @@
 #include "InputHandler.h"
 #include "../../Core/Inc/main.h"
 #include "../Button/Button.h"
-#include "../InterfaceButton/InterfaceButton.h"
-#include "cmsis_os2.h" // For osDelayUntil
+#include "../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h"
 
 static Button_Config_t tUserButton = {0};
+static DataModel_t *g_ptButtonEvent;
 
-void InputHandler_Init()
+void InputHandler_Init(DataModel_t *const inout_ptButtonEvent)
 {
-
     // Configure the Button
     tUserButton.pGpioPort = USER_BUTTON_GPIO_Port;
     tUserButton.u16GpioPin = USER_BUTTON_Pin;
@@ -25,9 +24,11 @@ void InputHandler_Init()
     tUserButton.tDebounceFlags.u32BitState = 0;
     tUserButton.tDebounceFlags.u16LongPressedMsecCounter = 0;
     tUserButton.tDebounceFlags.bLongPressTriggered = false;
+
+    g_ptButtonEvent = inout_ptButtonEvent;
 }
 
-void InputHandler_Loop(void)
+void InputHandler_Loop()
 {
     static uint32_t tick = 0;
     if (tick == 0)
@@ -38,23 +39,14 @@ void InputHandler_Loop(void)
     Button_TimIsr(&tUserButton);
 
     Button_Event_e eButtonEvent = Button_GetLastEvent(&tUserButton);
+    u32 u32Size = (u32)sizeof(eButtonEvent);
 
-    switch (eButtonEvent)
+    if (E_BUTTON_EVENT_NO_EVENT != eButtonEvent)
     {
-    case E_BUTTON_EVENT_PRESSED:
-        InterfaceButton_setEvent(E_INTERFACE_BUTTON_EVENT_PRESSED);
-        break;
-    case E_BUTTON_EVENT_RELEASED:
-        InterfaceButton_setEvent(E_INTERFACE_BUTTON_EVENT_RELEASED);
-        break;
-    case E_BUTTON_EVENT_LONG_PRESSED:
-        InterfaceButton_setEvent(E_INTERFACE_BUTTON_EVENT_LONG_PRESSED);
-        break;
-    default:
-        break;
-    }
+        DataModel_Write(g_ptButtonEvent, &eButtonEvent, u32Size);
 
-    Button_ClearLastEvent(&tUserButton);
+        Button_ClearLastEvent(&tUserButton);
+    }
 
     // 1ms tick for button polling (precise)
     tick += 1;

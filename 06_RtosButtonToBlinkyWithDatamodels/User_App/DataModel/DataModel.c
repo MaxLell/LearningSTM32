@@ -1,12 +1,35 @@
 #include "DataModel.h"
 #include <CustomAssert.h>
 
+// ################################################################################
+// static function declarations
+// ################################################################################
+
+/**
+ * @brief Notifies all attached observers of a data change in the DataModel.
+ * @param[in] in_ptDataModel Pointer to the DataModel instance.
+ */
 static void DataModel_NotifyObservers(const DataModel_t *const in_ptDataModel);
 
+/**
+ * @brief Copies a specified number of bytes from source to destination.
+ * @param[out] au8Destination Pointer to the destination buffer.
+ * @param[in] au8Source Pointer to the source buffer.
+ * @param[in] tNofBytes Number of bytes to copy.
+ */
 static void DataModel_CopyBytes(u8 *au8Destination, const u8 *au8Source,
-                                u32 u32NofBytes);
+                                size_t tNofBytes);
 
+/**
+ * @brief Checks the integrity of canary words in the DataModel for overflow
+ * detection.
+ * @param[in] in_ptDataModel Pointer to the DataModel instance.
+ */
 static void DataModel_CheckCanaryWords(const DataModel_t *const in_ptDataModel);
+
+// ################################################################################
+// function implementations
+// ################################################################################
 
 void DataModel_Init(DataModel_t *const inout_ptDataModel)
 {
@@ -78,7 +101,7 @@ void DataModel_Read(const DataModel_t *const in_ptDataModel,
         ASSERT(in_ptDataModel->au8Content);
         ASSERT(out_ptDataBytes);
         ASSERT(out_ptDataSize);
-        ASSERT(*out_ptDataSize > 0);
+        ASSERT(*out_ptDataSize == 0);
     }
 
     // Copy the bytes from the stored content into the output buffer
@@ -121,7 +144,6 @@ void DataModel_AddObserver(DataModel_t *const inout_ptDataModel,
     { // Input Checks
         ASSERT(inout_ptDataModel);
         ASSERT(inout_ptDataModel->bIsInitialized);
-        ASSERT(inout_ptDataModel->atObservers);
 
         ASSERT(DATAMODEL_PLACEHOLDER != in_ptObserver->u32Id);
         ASSERT(in_ptObserver->pFnNotification);
@@ -167,7 +189,6 @@ void DataModel_RemoveObserver(DataModel_t *const inout_ptDataModel,
     { // Input Checks
         ASSERT(inout_ptDataModel);
         ASSERT(inout_ptDataModel->bIsInitialized);
-        ASSERT(inout_ptDataModel->atObservers);
 
         ASSERT(DATAMODEL_PLACEHOLDER != in_ptObserver->u32Id);
     }
@@ -199,7 +220,6 @@ void DataModel_NotifyObservers(const DataModel_t *const in_ptDataModel)
     { // Input Checks
         ASSERT(in_ptDataModel);
         ASSERT(in_ptDataModel->bIsInitialized);
-        ASSERT(in_ptDataModel->atObservers);
     }
 
     bool bOneObserverIsNotified = false;
@@ -239,14 +259,13 @@ u32 DataModel_GetNumberOfAttachedObservers(
 }
 
 void DataModel_CopyBytes(u8 *au8Destination, const u8 *au8Source,
-                         u32 u32NofBytes)
+                         size_t tNofBytes)
 {
     { // Input Checks
         ASSERT(au8Destination);
         ASSERT(au8Source);
-        ASSERT(u32NofBytes > 0);
     }
-    for (u32 i = 0; i < u32NofBytes; ++i)
+    for (size_t i = 0; i < tNofBytes; ++i)
     {
         au8Destination[i] = au8Source[i];
     }

@@ -8,7 +8,9 @@
 #ifndef INPUTHANDLER_H
 #define INPUTHANDLER_H
 
-void InputHandler_Init(void);
+#include "../DataModel/DataModel.h"
+
+void InputHandler_Init(DataModel_t *const inout_ptButtonEvent);
 
 void InputHandler_Loop(void);
 
