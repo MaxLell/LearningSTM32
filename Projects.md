@@ -21,28 +21,29 @@ Here the Led is toggled by a timer interrupt after a long button press. Also mak
 - The LED is toggled 10 times when a long press occured on the button. (To be done by the timer ist)
 - The LED is toggled 2 times when a short press was detected (To be done by the timer isr)
 
-
-
 ## 1. CLI (UART and Timers)
-## 11_LoopedHelloWorldWithTimerInterrupt
+## 11_TimerIsrDrivenHeartB
 Loop-driven UART output: print a fixed string to a terminal emulator.
 
 ## 12_PolledCharEcho
 Polled UART input: read a character in from the terminal emulator and print it back out (echo it). This is the first step in implementing a CLI (Command Line Interface). Only print back one input char
 
 ## 13_InterruptDrivenCharEcho
-Interrupt-driven UART input: echo based on input interrupt. Same as before - only report back one character
+Interrupt-driven UART input: echo based on input interrupt. Same as before - only report back one character. Furthermore also send back a Heartbeat Message every Second once.
 
-## 14_CliGetVersionWithInterrupt
- Interrupt-driven UART CLI: accumulate input characters into a string; on receipt of a CR (Carriage Return), interpret the string as a command in non-interrupt context (for instance, a "version" command that prints a version string). This is the first command in a CLI, and the first major separation of interrupt and non-interrupt code sharing data.
+## 15_CliServerWithInterrupt
+Implement a CLI with the following High-Level Commands:
+1. Request Command
+2. Response
 
-#### 15_CliGetVersionWithDma
-DMA: send and receive chunks of data via DMA rather than programmatic character-at-a-time register access.
+Interrupt-driven UART CLI: accumulate input characters into a string, interpret the string as a command in non-interrupt context. For instance, a "version" command that prints a version string. This "Version" is then sent back via the CLI.
 
-#### 16_CliSendHeartbeatWithTimer
-Timer-driven UART output with input: print a periodic message in response to timer interrupts; change the frequency in response to input commands in the CLI.
+## 16_CliServerWithDma
+3. Send Large Data
+4. Receive Large Data
 
-#### 17_RtosCliWithDma
+
+## 17_RtosCliWithDma
 - Expand the existing RTOS Application. Use the concepts of the CLI that was implemented in this section
 	- The CLI Tool shall be sampled automatically in the background with the help of the DMA. Sending commands from the Mikrocontroller shall also be done by the DMA
 	- By sending Commands to the CLI (from the host)
