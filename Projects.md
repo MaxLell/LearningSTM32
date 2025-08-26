@@ -16,43 +16,32 @@ Blink the led in response to an external interrupt, which originates from the bu
 Here the Led is toggled by a timer interrupt after a long button press. Also make sure to debounce the Button.
 
 ### 05_RtosButtonToBlinky
-- The Button is sampled by the input handler task
-- The Output Handler task configures the timer (blink rate) and the blink counter
-- The LED is toggled 10 times when a long press occured on the button. (To be done by the timer ist)
-- The LED is toggled 2 times when a short press was detected (To be done by the timer isr)
+- Pressing a button briefly enables the led
+- Pressing a button for a longer period of time toggles the led
+- Releasing the button disables the LED
+- Implement the Sampling of the Button with an InputHandler Thread. Implement the actuation of the LED by a seperate Task called OutputHandler.
 
 ## 1. CLI (UART and Timers)
-## 11_TimerIsrDrivenHeartB
-Loop-driven UART output: print a fixed string to a terminal emulator.
+## 11_PolledEcho
+Polled UART IO: read a string in from the terminal emulator and print it back out (echo it). 
 
-## 12_PolledCharEcho
-Polled UART input: read a character in from the terminal emulator and print it back out (echo it). This is the first step in implementing a CLI (Command Line Interface). Only print back one input char
-
-## 13_InterruptDrivenCharEcho
+## 12_IsrEcho
 Interrupt-driven UART input: echo based on input interrupt. Same as before - only report back one character. Furthermore also send back a Heartbeat Message every Second once.
 
-## 15_CliServerWithInterrupt
-Implement a CLI with the following High-Level Commands:
-1. Request Command
-2. Response
+## 13_DmaEcho
+This is about receiving and sending a UART Echo on both the Rx and the Tx side with the DMA
 
-Interrupt-driven UART CLI: accumulate input characters into a string, interpret the string as a command in non-interrupt context. For instance, a "version" command that prints a version string. This "Version" is then sent back via the CLI.
-
-## 16_CliServerWithDma
-3. Send Large Data
-4. Receive Large Data
-
-
-## 17_RtosCliWithDma
-- Expand the existing RTOS Application. Use the concepts of the CLI that was implemented in this section
-	- The CLI Tool shall be sampled automatically in the background with the help of the DMA. Sending commands from the Mikrocontroller shall also be done by the DMA
-	- By sending Commands to the CLI (from the host)
-		- the user can control the amounts of blinks that the LED performs
-		- the on-time of the blinks shall be controllable
-		- the off-time of the blinks shall be controllable
-		- The CLI can trigger (same as the button) the blinking of the LED
-		- The CLI shall report back the duration of the system being active.
-
+## 14_RtosCli
+- Develop a small CLI which (and this is really up to you which approach of HW-interaction - polled, ISR or DMA on rx and tx side you chose):
+  - Reports back the version (0.1) initially when the system is started up
+  - Report back the Button State upon request
+  - Enable / Disable the LED upon request.
+  - Make it possible to send button events to the system.
+  - Enable / Disable the System internal button events upon request.
+  - Report back the LED state upon request
+  - Enable the system to sending a heartbeat on a regular basis (one second interval) + provide the functionality to disable it.
+    - Have the system log the events (including the time stamp - use the FreeRTOS Jitsi) and store them locally in static memory
+    - Report the the log-dump upon request.
 
 ## 2. Sensors and Actuators (SPI and I2C)
 
