@@ -1,9 +1,9 @@
-[submodule "11_PolledEcho"]
-	path = 11_PolledEcho
-	url = https://github.com/MaxLell/11_PolledEcho.git
 [submodule "05_RtosButtonToBlinky"]
 	path = 05_RtosButtonToBlinky
 	url = https://github.com/MaxLell/05_RtosButtonToBlinky.git
+[submodule "11_PolledEcho"]
+	path = 11_PolledEcho
+	url = https://github.com/MaxLell/11_PolledEcho.git
 [submodule "12_IsrEcho"]
 	path = 12_IsrEcho
-	url = https://github.com/MaxLell/11_PolledEcho.git
+	url = https://github.com/MaxLell/12_IsrEcho.git
