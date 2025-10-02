@@ -28,13 +28,11 @@ Polled UART IO: read a string in from the terminal emulator and print it back ou
 ## 12_IsrEcho
 Interrupt-driven UART input: echo based on input interrupt. Same as before - only report back one character. Make both the RX and the TX part sending and receiving bytes via interrupts.
 
-## 13_BasicCli
+## 13_CommandLineInterface
 - Develop a small CLI which (and this is really up to you which approach of HW-interaction - polled, ISR or DMA on rx and tx side you chose):
-  - Read the current button status
-  - Write (inject) a button event
-  - Enable / Disable the Button Events
-  - Enable / Disable the LED upon request.
-  - Report back the LED state upon request
+  - clears the current screen
+  - displays a help menu which lists all commands
+  - makes it possible to enable and disable an led
 
 ## 2. Sensors and Actuators (SPI and I2C)
 
