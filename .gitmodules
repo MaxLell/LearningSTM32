@@ -7,3 +7,6 @@
 [submodule "12_IsrEcho"]
 	path = 12_IsrEcho
 	url = https://github.com/MaxLell/12_IsrEcho.git
+[submodule "13_CommandLineInterface"]
+	path = 13_CommandLineInterface
+	url = https://github.com/MaxLell/13_CommandLineInterface.git
