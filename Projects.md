@@ -22,20 +22,47 @@ Here the Led is toggled by a timer interrupt after a long button press. Also mak
 - Implement the Sampling of the Button with an InputHandler Thread. Implement the actuation of the LED by a seperate Task called OutputHandler.
 
 ## 1. CLI (UART and Timers)
-## 11_PolledEcho
+### 11_PolledEcho
 Polled UART IO: read a string in from the terminal emulator and print it back out (echo it). 
 
-## 12_IsrEcho
+### 12_IsrEcho
 Interrupt-driven UART input: echo based on input interrupt. Same as before - only report back one character. Make both the RX and the TX part sending and receiving bytes via interrupts.
 
-## 13_CommandLineInterface
+### 13_CommandLineInterface
 - Develop a small CLI which (and this is really up to you which approach of HW-interaction - polled, ISR or DMA on rx and tx side you chose):
   - clears the current screen
   - displays a help menu which lists all commands
   - makes it possible to enable and disable an led
 
-## 2. Sensors and Actuators (SPI and I2C)
+## 2. PWMs
+### 21_EncoderToRgbLed
+- Use the Rotary RGB Click Board
+- Inputs
+  - Capture the Rotary Encoder's information
+  - Capture the Rotary Encoder's Button and extend the existing Button with the Rotary Encoder Button
+  - CLI: create a get_encoder command, which returns the current rotation to the user
+  - CLI: create a get_btn command, which returns the current button events (all 3 in sequence)
+  - CLI: create a set_rgb_led (idx,r,g,b) command, which makes it possible to set the rgb led state of an individual rgb led
+  - CLI: create a set_rgb_led_color command, which receives the color as an argument.
+- Outputs
+  - RgbLed: Write an rgb led driver, which uses a timer output and a dma to send signals to the addressable leds.
+- Input -> Output
+  - Write an example application, which translates the encoder ticks to the amount of leds being enabled.
+  - pressing the Encoder changes the color of all enabled leds from red -> blue -> green
 
-## 4. PWMs
+### 22_EncoderToBuzzer
+- Use the Rotary RGB Click Board
+- Inputs
+  - Reuse 21_EncoderToRgbLed Code for the encoder & the buttons (if you want also take in the rgb leds)
+  - CLI: create a play_buzzer_note - args: tone, length - this plays the note.
+- Outputs
+  - Buzzer: Write a buzzer driver, which uses Timer PWMs and DMAs to play notes.
 
 ## 3. Analogs
+### 31_McuTemperature
+- Sample the Mcu Temperature via the ADC
+- Run something very computationally expensive on the microcontroller and observe the temperature going up
+- CLI: Write a command, which lets you read the mcu temperature
+
+
+## 4. Sensors and Actuators (SPI and I2C)
