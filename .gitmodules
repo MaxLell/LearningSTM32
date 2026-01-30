@@ -10,3 +10,6 @@
 [submodule "13_CommandLineInterface"]
 	path = 13_CommandLineInterface
 	url = https://github.com/MaxLell/13_CommandLineInterface.git
+[submodule "21_BuzzOnCliCmd"]
+	path = 21_BuzzOnCliCmd
+	url = https://github.com/MaxLell/21_BuzzOnCliCmd.git
